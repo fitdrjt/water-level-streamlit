@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Fungsi untuk membaca data dari file CSV
+# Load data from file
 def load_data(sheet_name):
     df = pd.read_excel("ireland_water_level_hourly.xlsx", sheet_name=sheet_name)
     df['time'] = pd.to_datetime(df['time'])  
     return df
 
-# Fungsi untuk menampilkan halaman utama
+# Show the main page
 def main_page():
     st.title("🌊 Water Level Monitoring in Ireland 🌊")
     st.write("""
@@ -26,7 +26,7 @@ def main_page():
     Dive in and explore the dynamic tides of Ireland! 🌍🌊  
     """)
 
-    # Data lokasi stasiun
+    # Observation station location
     stations = pd.DataFrame({
         'Nama': ["Dublin Port", "Galway Port", "Sligo"],
         'lat': [53.3457, 53.269, 54.3099],
@@ -35,11 +35,12 @@ def main_page():
     
     st.map(stations)
 
+# Page based on observation location
 def location_page(sheet_name):
     st.title(f"Water Level - {sheet_name}")
     df = load_data(sheet_name)
     
-    # Pilihan range waktu
+    # Time range
     df['time'] = pd.to_datetime(df['time'], errors='coerce')  
     min_date = df['time'].min().date()
     max_date = df['time'].max().date()
@@ -61,10 +62,11 @@ def location_page(sheet_name):
     )
     st.plotly_chart(fig)
     
-    # Menampilkan tabel data
+    # Show table data
     st.write("### Water Level Data")
     st.dataframe(df_filtered)
 
+# Upload your own file page
 def upload_page():
     st.title("Upload Custom Water Level Data")
     uploaded_file = st.file_uploader("Choose CSV file", type=["csv"])
@@ -80,7 +82,7 @@ def upload_page():
         st.write("### Data Water Level")
         st.dataframe(df)
 
-# Navigasi halaman
+# Page Navigation
 st.sidebar.title("Navigasi")
 page = st.sidebar.selectbox("Pilih Halaman", ["Main", "Dublin Port", "Galway Port", "Sligo", 
                                               "Visualize Your Own!"])
@@ -96,6 +98,7 @@ elif page == "Sligo":
 elif page == "Visualize Your Own!":
     upload_page()
 
+# Style
 st.markdown("""
     <style>
         .stTitle {color: blue;}

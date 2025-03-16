@@ -4,7 +4,7 @@ import plotly.express as px
 
 # Fungsi untuk membaca data dari file CSV
 def load_data(sheet_name):
-    df = pd.read_excel(r"C:\Users\Fitri Wulan Darojati\Documents\GitHub\water-level-streamlit\ireland_water_level_hourly.xlsx", sheet_name=sheet_name)
+    df = pd.read_excel("ireland_water_level_hourly.xlsx", sheet_name=sheet_name)
     df['time'] = pd.to_datetime(df['time'])  
     return df
 
